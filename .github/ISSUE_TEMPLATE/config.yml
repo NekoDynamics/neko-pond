@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Product Direction
+    url: https://github.com/baiychic/neko-pond/blob/main/docs/PRODUCT.md
+    about: Review the product architecture before proposing broad scope changes.

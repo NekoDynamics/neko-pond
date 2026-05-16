@@ -1,0 +1,28 @@
+name: Task
+description: Track maintenance, documentation, or infrastructure work.
+title: "[Task] "
+labels:
+  - task
+  - triage
+body:
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: Files, systems, or workflows expected to change.
+    validations:
+      required: false
+  - type: checkboxes
+    id: done
+    attributes:
+      label: Done when
+      options:
+        - label: Implementation is complete.
+        - label: Validation is documented.
+        - label: Follow-up work is tracked.

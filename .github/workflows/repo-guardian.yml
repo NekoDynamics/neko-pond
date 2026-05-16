@@ -1,0 +1,55 @@
+name: Repo Guardian
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: repo-guardian-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  repository:
+    name: Repository checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check conflict markers
+        run: |
+          if git grep -nE '^(<<<<<<<|>>>>>>>)( |$)|^=======$' -- .; then
+            echo "::error::Conflict marker found."
+            exit 1
+          fi
+
+      - name: Validate GitHub YAML
+        run: |
+          ruby -e 'require "yaml"; Dir[".github/**/*.yml", ".github/**/*.yaml"].sort.each { |file| YAML.load_file(file); puts "valid #{file}" }'
+
+      - name: Validate required GitHub files
+        run: |
+          for file in \
+            .github/PULL_REQUEST_TEMPLATE.md \
+            .github/ISSUE_TEMPLATE/bug_report.yml \
+            .github/ISSUE_TEMPLATE/feature_request.yml \
+            .github/dependabot.yml
+          do
+            test -s "$file" || { echo "::error::$file is missing or empty"; exit 1; }
+          done
+
+  actions:
+    name: Action lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run actionlint
+        uses: rhysd/actionlint@v1
