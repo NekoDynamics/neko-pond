@@ -47,8 +47,8 @@ jobs:
             CODE_OF_CONDUCT.md \
             SECURITY.md \
             SUPPORT.md \
-            Docs/zh-CN/README.md \
-            Docs/en-US/README.md \
+            docs/zh-CN/README.md \
+            docs/en-US/README.md \
             App/README.md \
             Engine/README.md \
             AI/README.md
