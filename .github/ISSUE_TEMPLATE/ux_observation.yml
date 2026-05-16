@@ -1,0 +1,42 @@
+name: UX observation
+description: Document a behavioral or interaction observation from testing.
+title: "[UX] "
+labels:
+  - design
+  - triage
+body:
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment / 环境
+      description: Device placement, lighting, sound level, session length, and supervision context.
+    validations:
+      required: true
+  - type: textarea
+    id: feline_response
+    attributes:
+      label: Feline response / 猫的反应
+      description: Attention, tracking, paw contact, hesitation, repeated engagement, or exit behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: interaction
+    attributes:
+      label: Interaction details / 交互细节
+      description: Touch pattern, visual target, ripple response, motion speed, or audio cue.
+    validations:
+      required: true
+  - type: textarea
+    id: assessment
+    attributes:
+      label: Assessment / 判断
+      description: Explain whether the observation suggests clarity, fatigue, overstimulation, or missed affordance.
+    validations:
+      required: true
+  - type: textarea
+    id: attachments
+    attributes:
+      label: Attachments / 附件
+      description: Add screenshots, short video, timing notes, or diagrams when available.
+    validations:
+      required: false

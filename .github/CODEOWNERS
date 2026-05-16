@@ -1,1 +1,10 @@
-* @ichichuang
+# Repository ownership
+
+* @NekoDynamics/maintainers
+
+/App/ @NekoDynamics/app
+/Engine/ @NekoDynamics/engine
+/AI/ @NekoDynamics/ai
+/Assets/ @NekoDynamics/design
+/Docs/ @NekoDynamics/docs
+/.github/ @NekoDynamics/maintainers

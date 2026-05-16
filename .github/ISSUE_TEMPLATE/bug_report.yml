@@ -1,33 +1,52 @@
-name: Bug
+name: Bug report
 description: Report a reproducible product or engineering issue.
 title: "[Bug] "
 labels:
   - bug
   - triage
 body:
+  - type: markdown
+    attributes:
+      value: |
+        中文优先填写；English may follow each answer.
+  - type: input
+    id: device
+    attributes:
+      label: Device / 设备
+      placeholder: iPad Pro 12.9-inch 6th gen, iPadOS 18.x
+    validations:
+      required: true
+  - type: input
+    id: build
+    attributes:
+      label: Build / 构建
+      placeholder: commit SHA, TestFlight build, or local build tag
+    validations:
+      required: true
   - type: textarea
     id: observed
     attributes:
-      label: Observed Behavior
-      description: What happened?
+      label: Observed behavior / 观察到的现象
+      description: Include interaction, rendering, or AI behavior details.
     validations:
       required: true
   - type: textarea
     id: expected
     attributes:
-      label: Expected Behavior
-      description: What should have happened?
+      label: Expected behavior / 预期现象
     validations:
       required: true
   - type: textarea
     id: steps
     attributes:
-      label: Reproduction Steps
-      description: Provide the smallest known reproduction.
+      label: Reproduction steps / 复现步骤
+      description: Provide the smallest reliable reproduction.
     validations:
       required: true
-  - type: input
-    id: device
+  - type: textarea
+    id: performance
     attributes:
-      label: Device / OS
-      placeholder: iPad model and iPadOS version
+      label: Performance context / 性能上下文
+      description: FPS, frame-time spikes, touch latency, memory, GPU, or thermal notes.
+    validations:
+      required: false

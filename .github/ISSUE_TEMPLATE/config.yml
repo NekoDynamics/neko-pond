@@ -1,5 +1,8 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Product Direction
-    url: https://github.com/baiychic/neko-pond/blob/main/docs/PRODUCT.md
-    about: Review the product architecture before proposing broad scope changes.
+  - name: 中文文档 / Chinese documentation
+    url: https://github.com/NekoDynamics/neko-pond/tree/main/Docs/zh-CN
+    about: Start from the default Chinese documentation index.
+  - name: English documentation / 英文文档
+    url: https://github.com/NekoDynamics/neko-pond/tree/main/Docs/en-US
+    about: Use the mirrored English documentation index.

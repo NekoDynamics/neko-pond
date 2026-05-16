@@ -5,31 +5,42 @@ labels:
   - enhancement
   - triage
 body:
+  - type: markdown
+    attributes:
+      value: |
+        Proposals should protect latency, frame stability, and native iPadOS quality.
   - type: textarea
     id: problem
     attributes:
-      label: Problem
-      description: What user need or limitation should this solve?
+      label: Problem / 问题
+      description: What user, cat-facing, or engineering limitation should this solve?
     validations:
       required: true
   - type: textarea
     id: proposal
     attributes:
-      label: Proposal
-      description: What should change?
+      label: Proposal / 方案
+      description: Describe the smallest useful version.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area / 范围
+      options:
+        - App / SwiftUI
+        - Engine / SpriteKit
+        - Rendering / Metal
+        - AI Behavior / CoreML
+        - Touch Interaction
+        - Assets / Audio
+        - Documentation
     validations:
       required: true
   - type: textarea
-    id: alternatives
+    id: impact
     attributes:
-      label: Alternatives
-      description: Other approaches considered.
+      label: Impact / 影响
+      description: Explain latency, FPS, memory, GPU, behavior, and iPad compatibility impact.
     validations:
-      required: false
-  - type: textarea
-    id: context
-    attributes:
-      label: Additional context
-      description: Links, screenshots, sketches, or constraints.
-    validations:
-      required: false
+      required: true

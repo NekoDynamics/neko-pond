@@ -1,0 +1,48 @@
+name: AI behavior issue
+description: Report or refine feline interaction and behavior adaptation.
+title: "[AI] "
+labels:
+  - ai
+  - triage
+body:
+  - type: input
+    id: ecosystem
+    attributes:
+      label: Ecosystem / 生态
+      placeholder: Neko Pond
+    validations:
+      required: true
+  - type: textarea
+    id: observation
+    attributes:
+      label: Feline observation / 猫的行为观察
+      description: Describe posture, attention, tracking, paw motion, repetition, or disengagement.
+    validations:
+      required: true
+  - type: textarea
+    id: system_behavior
+    attributes:
+      label: System behavior / 系统行为
+      description: Describe fish movement, ripple response, pacing, or adaptation output.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected adaptation / 预期自适应
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context / 上下文
+      description: Device, session length, lighting, sound, touch pattern, and repeat count.
+    validations:
+      required: true
+  - type: textarea
+    id: metrics
+    attributes:
+      label: Metrics / 指标
+      description: Confidence, state transitions, reaction timing, or logs if available.
+    validations:
+      required: false

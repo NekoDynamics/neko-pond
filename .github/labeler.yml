@@ -7,7 +7,7 @@ documentation:
   - changed-files:
       - any-glob-to-any-file:
           - "**/*.md"
-          - docs/**
+          - Docs/**
 
 dependencies:
   - changed-files:
@@ -21,6 +21,9 @@ dependencies:
 source:
   - changed-files:
       - any-glob-to-any-file:
+          - App/**
+          - Engine/**
+          - AI/**
           - src/**
           - app/**
           - packages/**

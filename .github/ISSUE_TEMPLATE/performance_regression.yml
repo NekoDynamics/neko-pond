@@ -1,0 +1,56 @@
+name: Performance regression
+description: Report frame drops, latency spikes, or resource regressions.
+title: "[Performance] "
+labels:
+  - performance
+  - triage
+body:
+  - type: input
+    id: device
+    attributes:
+      label: Device / 设备
+      placeholder: iPad model, refresh rate, iPadOS version
+    validations:
+      required: true
+  - type: input
+    id: baseline
+    attributes:
+      label: Baseline / 基线
+      placeholder: last known good commit or build
+    validations:
+      required: true
+  - type: textarea
+    id: regression
+    attributes:
+      label: Regression / 回退
+      description: Include FPS, frame-time, touch latency, memory, GPU, or thermal changes.
+    validations:
+      required: true
+  - type: dropdown
+    id: affected_area
+    attributes:
+      label: Affected area / 影响范围
+      options:
+        - Touch latency
+        - FPS stability
+        - Frame-time spikes
+        - Memory growth
+        - GPU usage
+        - Thermal behavior
+        - Launch time
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction / 复现
+      description: Provide the smallest reliable reproduction path and session duration.
+    validations:
+      required: true
+  - type: textarea
+    id: traces
+    attributes:
+      label: Evidence / 证据
+      description: Instruments notes, screenshots, logs, or profiling summary.
+    validations:
+      required: false
