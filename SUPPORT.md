@@ -4,7 +4,7 @@
 
 ### 获取帮助
 
-- 阅读根目录 README 与 `Docs/zh-CN`
+- 阅读根目录 README 与 `docs/zh-CN`
 - 检查现有 issue 与 milestone
 - 优先报告可复现的行为与性能问题
 
@@ -26,7 +26,7 @@
 
 ### Getting Help
 
-- Read the root README and `Docs/en-US`
+- Read the root README and `docs/en-US`
 - Check existing issues and milestones
 - Prefer reproducible behavior and performance reports
 

@@ -1,0 +1,391 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10000000000000000000001 /* NekoPondApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000001 /* NekoPondApp.swift */; };
+		A10000000000000000000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000002 /* ContentView.swift */; };
+		A10000000000000000000005 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000005 /* Assets.xcassets */; };
+		A10000000000000000000008 /* FishMovementComponent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000008 /* FishMovementComponent.swift */; };
+		A10000000000000000000009 /* FishSteeringSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000009 /* FishSteeringSystem.swift */; };
+		A1000000000000000000000A /* EdgeAvoidanceBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000A /* EdgeAvoidanceBehavior.swift */; };
+		A1000000000000000000000B /* MotionTuning.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000B /* MotionTuning.swift */; };
+		A1000000000000000000000C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000C /* LaunchScreen.storyboard */; };
+		A1000000000000000000000D /* PondSpriteScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000D /* PondSpriteScene.swift */; };
+		A1000000000000000000000E /* PondSpriteModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000E /* PondSpriteModels.swift */; };
+		A1000000000000000000000F /* PondSpriteAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000F /* PondSpriteAssets.swift */; };
+		A10000000000000000000010 /* PondAssetRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000010 /* PondAssetRegistry.swift */; };
+		A10000000000000000000011 /* PondTextureCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000011 /* PondTextureCache.swift */; };
+		A10000000000000000000012 /* Pond in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000012 /* Pond */; };
+		A10000000000000000000013 /* Water in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000013 /* Water */; };
+		A10000000000000000000014 /* Koi in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000014 /* Koi */; };
+		A10000000000000000000015 /* Environment in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000015 /* Environment */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A20000000000000000000001 /* NekoPondApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NekoPondApp.swift; sourceTree = "<group>"; };
+		A20000000000000000000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A20000000000000000000003 /* PondScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PondScene.swift; sourceTree = "<group>"; };
+		A20000000000000000000004 /* SceneLifecycle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneLifecycle.swift; sourceTree = "<group>"; };
+		A20000000000000000000005 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A20000000000000000000006 /* NekoPond.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NekoPond.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A20000000000000000000007 /* FishEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishEntity.swift; sourceTree = "<group>"; };
+		A20000000000000000000008 /* FishMovementComponent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishMovementComponent.swift; sourceTree = "<group>"; };
+		A20000000000000000000009 /* FishSteeringSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FishSteeringSystem.swift; sourceTree = "<group>"; };
+		A2000000000000000000000A /* EdgeAvoidanceBehavior.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeAvoidanceBehavior.swift; sourceTree = "<group>"; };
+		A2000000000000000000000B /* MotionTuning.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionTuning.swift; sourceTree = "<group>"; };
+		A2000000000000000000000C /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		A2000000000000000000000D /* PondSpriteScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PondSpriteScene.swift; sourceTree = "<group>"; };
+		A2000000000000000000000E /* PondSpriteModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PondSpriteModels.swift; sourceTree = "<group>"; };
+		A2000000000000000000000F /* PondSpriteAssets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PondSpriteAssets.swift; sourceTree = "<group>"; };
+		A20000000000000000000010 /* PondAssetRegistry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PondAssetRegistry.swift; sourceTree = "<group>"; };
+		A20000000000000000000011 /* PondTextureCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PondTextureCache.swift; sourceTree = "<group>"; };
+		A20000000000000000000012 /* Pond */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Pond; path = ../../../Assets/Pond; sourceTree = "<group>"; };
+		A20000000000000000000013 /* Water */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Water; path = ../../../Assets/Water; sourceTree = "<group>"; };
+		A20000000000000000000014 /* Koi */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Koi; path = ../../../Assets/Koi; sourceTree = "<group>"; };
+		A20000000000000000000015 /* Environment */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Environment; path = ../../../Assets/Environment; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A30000000000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		A40000000000000000000001 = {
+			isa = PBXGroup;
+			children = (
+				A40000000000000000000002 /* NekoPond */,
+				A40000000000000000000003 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		A40000000000000000000002 /* NekoPond */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000001 /* NekoPondApp.swift */,
+				A20000000000000000000002 /* ContentView.swift */,
+				A20000000000000000000003 /* PondScene.swift */,
+				A20000000000000000000004 /* SceneLifecycle.swift */,
+				A20000000000000000000007 /* FishEntity.swift */,
+				A20000000000000000000008 /* FishMovementComponent.swift */,
+				A20000000000000000000009 /* FishSteeringSystem.swift */,
+				A2000000000000000000000A /* EdgeAvoidanceBehavior.swift */,
+				A2000000000000000000000B /* MotionTuning.swift */,
+				A2000000000000000000000D /* PondSpriteScene.swift */,
+				A2000000000000000000000E /* PondSpriteModels.swift */,
+				A2000000000000000000000F /* PondSpriteAssets.swift */,
+				A20000000000000000000010 /* PondAssetRegistry.swift */,
+				A20000000000000000000011 /* PondTextureCache.swift */,
+				A20000000000000000000012 /* Pond */,
+				A20000000000000000000013 /* Water */,
+				A20000000000000000000014 /* Koi */,
+				A20000000000000000000015 /* Environment */,
+				A2000000000000000000000C /* LaunchScreen.storyboard */,
+				A20000000000000000000005 /* Assets.xcassets */,
+			);
+			path = NekoPond;
+			sourceTree = "<group>";
+		};
+		A40000000000000000000003 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000000000006 /* NekoPond.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A50000000000000000000001 /* NekoPond */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A90000000000000000000002 /* Build configuration list for PBXNativeTarget "NekoPond" */;
+			buildPhases = (
+				A70000000000000000000001 /* Sources */,
+				A30000000000000000000001 /* Frameworks */,
+				A80000000000000000000001 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = NekoPond;
+			productName = NekoPond;
+			productReference = A20000000000000000000006 /* NekoPond.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A60000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1550;
+				LastUpgradeCheck = 1550;
+				TargetAttributes = {
+					A50000000000000000000001 = {
+						CreatedOnToolsVersion = 15.4;
+					};
+				};
+			};
+			buildConfigurationList = A90000000000000000000001 /* Build configuration list for PBXProject "NekoPond" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A40000000000000000000001;
+			productRefGroup = A40000000000000000000003 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A50000000000000000000001 /* NekoPond */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A80000000000000000000001 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000005 /* Assets.xcassets in Resources */,
+				A1000000000000000000000C /* LaunchScreen.storyboard in Resources */,
+				A10000000000000000000012 /* Pond in Resources */,
+				A10000000000000000000013 /* Water in Resources */,
+				A10000000000000000000014 /* Koi in Resources */,
+				A10000000000000000000015 /* Environment in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A70000000000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000001 /* NekoPondApp.swift in Sources */,
+				A10000000000000000000002 /* ContentView.swift in Sources */,
+				A10000000000000000000008 /* FishMovementComponent.swift in Sources */,
+				A10000000000000000000009 /* FishSteeringSystem.swift in Sources */,
+				A1000000000000000000000A /* EdgeAvoidanceBehavior.swift in Sources */,
+				A1000000000000000000000B /* MotionTuning.swift in Sources */,
+				A1000000000000000000000D /* PondSpriteScene.swift in Sources */,
+				A1000000000000000000000E /* PondSpriteModels.swift in Sources */,
+				A1000000000000000000000F /* PondSpriteAssets.swift in Sources */,
+				A10000000000000000000010 /* PondAssetRegistry.swift in Sources */,
+				A10000000000000000000011 /* PondTextureCache.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		B10000000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		B10000000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B20000000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CADisableMinimumFrameDurationOnPhone = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.neko-pond.NekoPond;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_DEVICE_FAMILIES = 2;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Debug;
+		};
+		B20000000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CADisableMinimumFrameDurationOnPhone = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.neko-pond.NekoPond;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_DEVICE_FAMILIES = 2;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 2;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A90000000000000000000001 /* Build configuration list for PBXProject "NekoPond" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B10000000000000000000001 /* Debug */,
+				B10000000000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A90000000000000000000002 /* Build configuration list for PBXNativeTarget "NekoPond" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B20000000000000000000001 /* Debug */,
+				B20000000000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A60000000000000000000001 /* Project object */;
+}
