@@ -73,6 +73,16 @@ enum PondAssetRegistry {
         }
     }
 
+    enum KoiWarp: CaseIterable {
+        case kohakuBase
+
+        var relativePath: String {
+            switch self {
+            case .kohakuBase: "KoiWarp/koi_kohaku_warp_base.png"
+            }
+        }
+    }
+
     enum EnvironmentAsset: CaseIterable {
         case aquaticGrass01
         case aquaticGrass02
@@ -114,11 +124,13 @@ enum PondAssetRegistry {
     static func path(for asset: PondBackground) -> String { asset.relativePath }
     static func path(for asset: WaterOverlay) -> String { asset.relativePath }
     static func path(for asset: KoiAtlas) -> String { asset.relativePath }
+    static func path(for asset: KoiWarp) -> String { asset.relativePath }
     static func path(for asset: EnvironmentAsset) -> String { asset.relativePath }
 
     static let allRuntimeAssetPaths: [String] =
         PondBackground.allCases.map(\.relativePath) +
         WaterOverlay.allCases.map(\.relativePath) +
         KoiAtlas.allCases.map(\.relativePath) +
+        KoiWarp.allCases.map(\.relativePath) +
         EnvironmentAsset.allCases.map(\.relativePath)
 }

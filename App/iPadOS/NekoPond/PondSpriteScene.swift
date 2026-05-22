@@ -12,6 +12,7 @@ final class PondSpriteScene: SKScene {
     private var activeFishCount = 6
     private var rippleStrength: CGFloat = 0.62
     private var interactionSensitivity: CGFloat = 1.0
+    private var koiWarpPrototype: KoiWarpPrototype?
     private var isSimulating = false
     private var lastUpdateTime: TimeInterval?
     private let maximumDeltaTime: TimeInterval = 1.0 / 30.0
@@ -90,6 +91,8 @@ final class PondSpriteScene: SKScene {
             syncFishNode(index: i, sceneScale: sceneScale)
         }
 
+        koiWarpPrototype?.update(deltaTime: deltaTime, sceneSize: size)
+
         // Fade expired ripples
         ripplePool.removeAll { node in
             node.alpha <= 0.01
@@ -107,6 +110,7 @@ final class PondSpriteScene: SKScene {
         fishConfigs.removeAll()
         ripplePool.removeAll()
         moteEmitter = nil
+        koiWarpPrototype = nil
         buildLayers()
     }
 
@@ -197,6 +201,7 @@ final class PondSpriteScene: SKScene {
 
         // 5-6. Koi (shadows + bodies)
         buildFish(sceneScale: sceneScale)
+        buildKoiWarpPrototype()
 
         // 7. Environment (lotus, stones)
         buildEnvironment(sceneScale: sceneScale)
@@ -377,6 +382,12 @@ final class PondSpriteScene: SKScene {
             movement.depth = CGFloat.random(in: -1.8 ... -0.4)
             fishMovements.append(movement)
         }
+    }
+
+    private func buildKoiWarpPrototype() {
+        let prototype = KoiWarpPrototype(textureCache: textureCache, sceneSize: size)
+        addChild(prototype)
+        koiWarpPrototype = prototype
     }
 
     private func initialFishPosition(at index: Int, total: Int) -> CGPoint {

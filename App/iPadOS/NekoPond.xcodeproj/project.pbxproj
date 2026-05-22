@@ -20,10 +20,12 @@
 		A1000000000000000000000F /* PondSpriteAssets.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000000000000F /* PondSpriteAssets.swift */; };
 		A10000000000000000000010 /* PondAssetRegistry.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000010 /* PondAssetRegistry.swift */; };
 		A10000000000000000000011 /* PondTextureCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000011 /* PondTextureCache.swift */; };
+		A10000000000000000000017 /* KoiWarpPrototype.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000017 /* KoiWarpPrototype.swift */; };
 		A10000000000000000000012 /* Pond in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000012 /* Pond */; };
 		A10000000000000000000013 /* Water in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000013 /* Water */; };
 		A10000000000000000000014 /* Koi in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000014 /* Koi */; };
 		A10000000000000000000015 /* Environment in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000015 /* Environment */; };
+		A10000000000000000000016 /* KoiWarp in Resources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000016 /* KoiWarp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +50,8 @@
 		A20000000000000000000013 /* Water */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Water; path = ../../../Assets/Water; sourceTree = "<group>"; };
 		A20000000000000000000014 /* Koi */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Koi; path = ../../../Assets/Koi; sourceTree = "<group>"; };
 		A20000000000000000000015 /* Environment */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Environment; path = ../../../Assets/Environment; sourceTree = "<group>"; };
+		A20000000000000000000016 /* KoiWarp */ = {isa = PBXFileReference; lastKnownFileType = folder; name = KoiWarp; path = ../../../Assets/KoiWarp; sourceTree = "<group>"; };
+		A20000000000000000000017 /* KoiWarpPrototype.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoiWarpPrototype.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,10 +90,12 @@
 				A2000000000000000000000F /* PondSpriteAssets.swift */,
 				A20000000000000000000010 /* PondAssetRegistry.swift */,
 				A20000000000000000000011 /* PondTextureCache.swift */,
+				A20000000000000000000017 /* KoiWarpPrototype.swift */,
 				A20000000000000000000012 /* Pond */,
 				A20000000000000000000013 /* Water */,
 				A20000000000000000000014 /* Koi */,
 				A20000000000000000000015 /* Environment */,
+				A20000000000000000000016 /* KoiWarp */,
 				A2000000000000000000000C /* LaunchScreen.storyboard */,
 				A20000000000000000000005 /* Assets.xcassets */,
 			);
@@ -168,6 +174,7 @@
 				A10000000000000000000013 /* Water in Resources */,
 				A10000000000000000000014 /* Koi in Resources */,
 				A10000000000000000000015 /* Environment in Resources */,
+				A10000000000000000000016 /* KoiWarp in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -189,6 +196,7 @@
 				A1000000000000000000000F /* PondSpriteAssets.swift in Sources */,
 				A10000000000000000000010 /* PondAssetRegistry.swift in Sources */,
 				A10000000000000000000011 /* PondTextureCache.swift in Sources */,
+				A10000000000000000000017 /* KoiWarpPrototype.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
