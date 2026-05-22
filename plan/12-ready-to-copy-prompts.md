@@ -107,120 +107,75 @@ Final report format:
 
 ---
 
-## Prompt 2 — Phase 1D: replace koi with static atlas-backed sprites only
+## Prompt K1 — regenerate one clean RGBA mesh-deformable koi texture
 
 You are working on NEKO POND, a native iPadOS SwiftUI + SpriteKit app.
 
-Task: Implement Phase 1D only: replace procedural koi bodies with static atlas-backed sprites.
+Task: Execute Phase K1 only: create or import one clean RGBA mesh-deformable koi texture candidate for SpriteKit warp prototyping.
 
 Read first:
 
 - `plan/README.md`
-- `plan/00-current-state-and-facts.md`
-- `plan/03-phase-roadmap.md` Phase 1D
+- `plan/03-phase-roadmap.md` Phase K1
 - `plan/04-asset-runtime-pipeline.md`
-- `plan/05-spritekit-rendering-plan.md`
 - `plan/06-koi-atlas-and-motion-plan.md`
 - `plan/11-ai-agent-execution-protocol.md`
 
 Strict rules:
 
-- Implement Phase 1D only.
-- Use static atlas-backed koi sprites only.
-- Do not animate atlas frames yet.
-- Do not change fish steering/movement behavior.
-- Do not change water overlays except if required to keep fish visible, and ask first if so.
-- Do not replace environment.
-- Do not modify Settings/HUD/onboarding.
-- Do not rename or edit assets.
+- Planning and asset validation scope only unless explicitly allowed to place the candidate asset.
+- Do not modify `App/**`.
+- Do not modify Xcode project.
+- Do not write production Swift code.
+- Do not rescue current atlas crops.
 - Do not commit.
 
-Files allowed to edit:
+Required koi texture properties:
 
-- `App/iPadOS/NekoPond/PondSpriteScene.swift`
-- `App/iPadOS/NekoPond/PondSpriteModels.swift`
-- `App/iPadOS/NekoPond/PondAssetRegistry.swift` only if a variant-to-atlas helper is needed
+- True RGBA PNG.
+- Transparent background.
+- No checkerboard.
+- No white/black baked background.
+- Single straight top-down koi body.
+- Head facing right, tail left.
+- Centered in canvas.
+- Transparent padding for warp deformation.
+- No baked shadow.
 
-Files forbidden to edit:
-
-- `App/iPadOS/NekoPond/ContentView.swift`
-- `App/iPadOS/NekoPond/FishMovementComponent.swift`
-- `App/iPadOS/NekoPond/FishSteeringSystem.swift`
-- `App/iPadOS/NekoPond/EdgeAvoidanceBehavior.swift`
-- `App/iPadOS/NekoPond/MotionTuning.swift`
-- `App/iPadOS/NekoPond/PondScene.swift`
-- `App/iPadOS/NekoPond/SceneLifecycle.swift`
-- `App/iPadOS/NekoPond.xcodeproj/project.pbxproj`
-- `Assets/**`
-- `Design/**`
-- `docs/**`
-- `plan/**`
-
-Use these frozen Koi assets:
-
-- `Koi/koi_cream_red_atlas.png`
-- `Koi/koi_kohaku_atlas.png`
-- `Koi/koi_sanke_atlas.png`
-- `Koi/koi_shiro_utsuri_atlas.png`
-- `Koi/koi_showa_atlas.png`
-- `Koi/koi_yamabuki_atlas.png`
-
-Before editing, inspect atlas dimensions. Do not guess slicing if dimensions/layout are unclear. If frame metadata is insufficient to select a clean static crop, stop and report the metadata needed.
-
-Validation command:
+Validation:
 
 ```bash
-xcodebuild -project App/iPadOS/NekoPond.xcodeproj -scheme NekoPond -destination 'platform=iOS Simulator,name=iPad Pro 13-inch (M4)' -derivedDataPath /tmp/NekoPondDerivedData build
+python3 - <<'EOF'
+from PIL import Image
+from pathlib import Path
+p = Path('PATH_TO_CANDIDATE.png')
+im = Image.open(p)
+print(p, im.mode, im.size)
+print('has_alpha', im.mode in ('RGBA', 'LA') or 'transparency' in im.info)
+EOF
 ```
-
-Screenshot requirements:
-
-- Launch on iPad landscape simulator.
-- Capture screenshot showing visible fish.
-- If practical, verify fish count 3 and 9 through Settings and capture/report observations.
-
-Acceptance criteria:
-
-- Koi body sprites use frozen Koi atlas textures in normal runtime.
-- Procedural koi body texture is no longer used for normal body rendering.
-- Fish remain large and trackable.
-- No atlas bleed/cropping artifacts.
-- Shadows still align.
-- Movement behavior remains unchanged.
-- Build succeeds.
-
-Stop conditions:
-
-- Atlas metadata/layout cannot be verified enough for a clean static crop.
-- Fish become too small or hard to track.
-- Atlas artifacts appear.
-- Build fails.
-- A forbidden file seems necessary.
 
 Final report format:
 
 1. Phase completed or stopped.
-2. Files changed.
-3. Atlas dimensions and crop strategy.
-4. Build command/result.
-5. Screenshot evidence.
-6. Warnings observed.
-7. Acceptance criteria status.
-8. Rollback notes.
+2. Candidate asset path, if any.
+3. Alpha/background validation.
+4. Padding/deformation suitability.
+5. Files changed.
+6. Stop risks.
 
 ---
 
-## Prompt 3 — Phase 1E: add koi atlas animation and movement refinement only
+## Prompt K2 — isolated SKWarpGeometryGrid one-fish prototype
 
 You are working on NEKO POND, a native iPadOS SwiftUI + SpriteKit app.
 
-Task: Implement Phase 1E only: add koi atlas animation and small movement presentation refinement.
+Task: Execute Phase K2 only: build an isolated single-fish `SKWarpGeometryGrid` prototype using one clean RGBA koi texture.
 
 Read first:
 
 - `plan/README.md`
-- `plan/00-current-state-and-facts.md`
-- `plan/03-phase-roadmap.md` Phase 1E
+- `plan/03-phase-roadmap.md` Phase K2
 - `plan/04-asset-runtime-pipeline.md`
 - `plan/05-spritekit-rendering-plan.md`
 - `plan/06-koi-atlas-and-motion-plan.md`
@@ -228,32 +183,24 @@ Read first:
 
 Strict rules:
 
-- Implement Phase 1E only.
-- Start from Phase 1D static atlas-backed koi.
-- Do not proceed if atlas frame metadata is still unclear.
-- Add subtle swim animation only.
-- Keep movement calm and cat-readable.
-- Do not rebuild water/environment/Settings/HUD/onboarding.
-- Do not rename or edit assets.
+- Prototype one fish only.
+- Do not integrate into normal pond runtime yet.
+- Do not add multi-fish behavior.
+- Do not use atlas cropping or frame flipping.
+- Do not modify water/environment/Settings/HUD/onboarding.
 - Do not commit.
 
-Files allowed to edit:
+Prototype requirements:
 
-- `App/iPadOS/NekoPond/PondSpriteScene.swift`
-- `App/iPadOS/NekoPond/PondSpriteModels.swift`
-- `App/iPadOS/NekoPond/FishMovementComponent.swift` only if presentation animation state is necessary
-- `App/iPadOS/NekoPond/FishSteeringSystem.swift` only for small directly required tuning
-
-Files forbidden to edit:
-
-- `App/iPadOS/NekoPond/ContentView.swift`
-- `App/iPadOS/NekoPond/PondScene.swift`
-- `App/iPadOS/NekoPond/SceneLifecycle.swift`
-- `App/iPadOS/NekoPond.xcodeproj/project.pbxproj` unless user explicitly approves adding a metadata Swift file
-- `Assets/**`
-- `Design/**`
-- `docs/**`
-- `plan/**`
+- `SKSpriteNode` with one clean RGBA koi texture.
+- Cached original `SKWarpGeometryGrid`.
+- Per-frame destination grid update.
+- Root node position/heading separate from warp.
+- Body curvature from turn intensity.
+- Tail beat from speed.
+- Independent phase seed.
+- No per-frame texture decoding.
+- No full atlas sheet display.
 
 Validation command:
 
@@ -263,38 +210,131 @@ xcodebuild -project App/iPadOS/NekoPond.xcodeproj -scheme NekoPond -destination 
 
 Screenshot/video requirements:
 
-- Launch on iPad landscape simulator.
-- Capture a still screenshot.
-- Capture short video or multiple screenshots showing animated fish.
-
-Acceptance criteria:
-
-- Koi animation uses confirmed atlas frames.
-- Animation is subtle, smooth, and natural.
-- No flicker, wrong frame order, or crop bleed.
-- Movement remains calm and organic.
-- Fish remain large and trackable.
-- Build succeeds.
-
-Stop conditions:
-
-- Frame metadata is not confirmed.
-- Animation causes artifacts.
-- Fish become jittery/aggressive/hard to track.
-- Build fails.
-- A forbidden file seems necessary.
+- Capture still screenshot.
+- Capture short video or repeated screenshots showing warp deformation.
 
 Final report format:
 
 1. Phase completed or stopped.
 2. Files changed.
-3. Animation metadata/frame strategy.
-4. Movement tuning changes, if any.
-5. Build command/result.
-6. Screenshot/video evidence.
-7. Warnings observed.
-8. Acceptance criteria status.
-9. Rollback notes.
+3. Grid resolution and deformation model.
+4. Build command/result.
+5. Screenshot/video evidence.
+6. Visual acceptance status.
+7. Rollback notes.
+
+---
+
+## Prompt K3 — one-fish PondSpriteScene warp integration
+
+You are working on NEKO POND, a native iPadOS SwiftUI + SpriteKit app.
+
+Task: Execute Phase K3 only: integrate the validated warp koi renderer into `PondSpriteScene` with exactly one active fish.
+
+Read first:
+
+- `plan/README.md`
+- `plan/03-phase-roadmap.md` Phase K3
+- `plan/04-asset-runtime-pipeline.md`
+- `plan/05-spritekit-rendering-plan.md`
+- `plan/06-koi-atlas-and-motion-plan.md`
+- `plan/11-ai-agent-execution-protocol.md`
+
+Strict rules:
+
+- One warp fish only.
+- Preserve existing pond background, water, environment, ripples, and SwiftUI shell.
+- Do not expand to variants.
+- Do not use atlas crop/frame flipping.
+- Do not modify Xcode project unless asset membership was explicitly approved.
+- Do not commit.
+
+Runtime requirements:
+
+- Fish root node controls position and heading.
+- `SKWarpGeometryGrid` controls body/tail deformation.
+- Cached original grid.
+- Per-frame destination grid update only.
+- Body curvature from smoothed turn intensity.
+- Tail beat from smoothed speed.
+- No per-frame texture decoding.
+- No full atlas sheet display.
+
+Validation command:
+
+```bash
+xcodebuild -project App/iPadOS/NekoPond.xcodeproj -scheme NekoPond -destination 'platform=iOS Simulator,name=iPad Pro 13-inch (M4)' -derivedDataPath /tmp/NekoPondDerivedData build
+```
+
+Screenshot/video requirements:
+
+- iPad landscape screenshot showing one koi in pond.
+- Short video or repeated screenshots showing movement and deformation.
+
+Final report format:
+
+1. Phase completed or stopped.
+2. Files changed.
+3. Runtime asset used.
+4. Build command/result.
+5. Screenshot/video evidence.
+6. Visual acceptance status.
+7. Rollback notes.
+
+---
+
+## Prompt K4 — expand warp koi to 3–6 validated variants
+
+You are working on NEKO POND, a native iPadOS SwiftUI + SpriteKit app.
+
+Task: Execute Phase K4 only: expand validated warp koi from one fish to 3–6 variants after each texture passes RGBA/padding validation.
+
+Read first:
+
+- `plan/README.md`
+- `plan/03-phase-roadmap.md` Phase K4
+- `plan/04-asset-runtime-pipeline.md`
+- `plan/05-spritekit-rendering-plan.md`
+- `plan/06-koi-atlas-and-motion-plan.md`
+- `plan/11-ai-agent-execution-protocol.md`
+
+Strict rules:
+
+- Add only validated RGBA mesh-deformable koi textures.
+- Expand gradually to 3–6 fish, not 9 by default.
+- Assign independent phase offsets.
+- Do not use atlas cropping/frame flipping.
+- Do not modify unrelated water/environment/UI systems.
+- Do not commit.
+
+Acceptance criteria:
+
+- 3–6 koi remain readable and alive.
+- No synchronized tail beats.
+- No checkerboard/background artifacts.
+- Performance remains smooth.
+- Fish count changes remain stable within the scoped range.
+
+Validation command:
+
+```bash
+xcodebuild -project App/iPadOS/NekoPond.xcodeproj -scheme NekoPond -destination 'platform=iOS Simulator,name=iPad Pro 13-inch (M4)' -derivedDataPath /tmp/NekoPondDerivedData build
+```
+
+Screenshot/video requirements:
+
+- iPad landscape screenshot showing multiple fish.
+- Short video or repeated screenshots showing independent motion.
+
+Final report format:
+
+1. Phase completed or stopped.
+2. Files changed.
+3. Validated koi assets used.
+4. Build command/result.
+5. Screenshot/video evidence.
+6. Performance/readability notes.
+7. Rollback notes.
 
 ---
 

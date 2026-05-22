@@ -170,30 +170,20 @@ xcodebuild -project App/iPadOS/NekoPond.xcodeproj -scheme NekoPond -destination 
 - Build fails.
 - More than allowed files need changes.
 
-## Phase 1D — koi atlas static replacement
+## Phase K0 — reject failed koi experiment and return to stable baseline
 
 ### Objective
 
-Replace procedural koi body sprites with static atlas-backed sprites only. Do not animate atlas frames yet.
+Reject the failed atlas-crop/frame-flipping/segmented-sticker koi direction and preserve or restore the last stable koi baseline before new warp work begins.
 
 ### Exact files likely to change
 
-- `App/iPadOS/NekoPond/PondSpriteScene.swift`
-- `App/iPadOS/NekoPond/PondSpriteModels.swift`
-- `App/iPadOS/NekoPond/PondAssetRegistry.swift` only if variant mapping helper is needed.
+Implementation phase only; this planning update changes `plan/**` only. Future execution may touch koi runtime files only if needed to remove broken experiment code.
 
 ### Forbidden files
 
-- `App/iPadOS/NekoPond/ContentView.swift`
-- `App/iPadOS/NekoPond/FishMovementComponent.swift`
-- `App/iPadOS/NekoPond/FishSteeringSystem.swift`
-- `App/iPadOS/NekoPond/EdgeAvoidanceBehavior.swift`
-- `App/iPadOS/NekoPond/MotionTuning.swift`
-- `App/iPadOS/NekoPond/PondScene.swift`
-- `Assets/**`
-- `Design/**`
-- `docs/**`
-- Xcode project.
+- `Assets/**` unless explicitly reverting generated failed assets in a dedicated asset cleanup phase.
+- Unrelated SwiftUI, water, environment, or Xcode project files.
 
 ### Validation commands
 
@@ -201,51 +191,79 @@ Replace procedural koi body sprites with static atlas-backed sprites only. Do no
 xcodebuild -project App/iPadOS/NekoPond.xcodeproj -scheme NekoPond -destination 'platform=iOS Simulator,name=iPad Pro 13-inch (M4)' -derivedDataPath /tmp/NekoPondDerivedData build
 ```
 
-### Screenshot requirements
-
-- iPad landscape screenshot showing all visible fish.
-- Screenshot or note for fish count 3 and 9 if manually adjusted in Settings.
-
 ### Acceptance criteria
 
-- Koi bodies use frozen Koi atlas textures.
-- No procedural koi body texture is used for normal runtime body rendering.
-- Fish remain large, trackable, correctly rotated, and not stretched badly.
-- No atlas neighbor bleed is visible.
-- Shadows still align.
-- Movement behavior remains unchanged.
-
-### Rollback plan
-
-- Revert static atlas mapping and return to procedural body texture only if atlas slicing is visibly invalid.
+- Atlas-crop rescue is no longer the planned koi path.
+- Runtime is stable enough to begin isolated warp prototyping.
+- No production Swift code is added for the new renderer in K0.
 
 ### Stop conditions
 
-- Atlas metadata is insufficient to crop safely.
-- Static atlas frame cannot be selected without visible artifacts.
-- Build fails.
+- Stable baseline cannot be identified.
+- Cleanup requires broad unrelated rewrites.
 
-## Phase 1E — koi atlas animation and movement refinement
+## Phase K1 — regenerate one clean RGBA mesh-deformable koi texture
 
 ### Objective
 
-Add atlas-backed koi animation and refine movement presentation without broad behavior rewrites.
+Create or import one clean, single-body, top-down RGBA koi PNG suitable for SpriteKit mesh deformation.
+
+### Required asset properties
+
+- True RGBA PNG.
+- Transparent background.
+- No checkerboard.
+- No white/black baked background.
+- Single straight top-down koi body.
+- Head facing right, tail left.
+- Centered in canvas.
+- Transparent padding for warp deformation.
+- No baked fish shadow.
+
+### Validation commands
+
+Use image inspection, for example:
+
+```bash
+python3 - <<'EOF'
+from PIL import Image
+from pathlib import Path
+p = Path('PATH_TO_CANDIDATE.png')
+im = Image.open(p)
+print(p, im.mode, im.size)
+print('has_alpha', im.mode in ('RGBA', 'LA') or 'transparency' in im.info)
+EOF
+```
+
+### Acceptance criteria
+
+- One texture passes alpha/background/padding review.
+- Asset is not committed into runtime folders unless the phase explicitly allows resource changes.
+
+### Stop conditions
+
+- Candidate contains baked checkerboard/background.
+- Candidate is not suitable for deformation.
+
+## Phase K2 — isolated single-fish SKWarpGeometryGrid prototype
+
+### Objective
+
+Build an isolated one-fish SpriteKit prototype proving `SKWarpGeometryGrid` can create believable swimming from one clean texture.
 
 ### Exact files likely to change
 
-- `App/iPadOS/NekoPond/PondSpriteScene.swift`
-- `App/iPadOS/NekoPond/PondSpriteModels.swift`
-- `App/iPadOS/NekoPond/FishMovementComponent.swift` only for presentation-related animation state if necessary.
-- `App/iPadOS/NekoPond/FishSteeringSystem.swift` only for small tuning if directly required.
+To be defined by the execution prompt. Prefer isolated/debug-only scope. Do not integrate into production pond flow yet.
 
-### Forbidden files
+### Required prototype behavior
 
-- `App/iPadOS/NekoPond/ContentView.swift`
-- `App/iPadOS/NekoPond/PondScene.swift`
-- `Assets/**`
-- `Design/**`
-- `docs/**`
-- Xcode project unless adding an explicitly approved metadata Swift file.
+- Cache original grid.
+- Update destination grid per frame.
+- Keep root node position/heading separate from deformation.
+- Drive body curvature from turn intensity.
+- Drive tail beat from speed.
+- Use independent phase seed even with one fish.
+- Avoid per-frame texture decoding.
 
 ### Validation commands
 
@@ -253,29 +271,93 @@ Add atlas-backed koi animation and refine movement presentation without broad be
 xcodebuild -project App/iPadOS/NekoPond.xcodeproj -scheme NekoPond -destination 'platform=iOS Simulator,name=iPad Pro 13-inch (M4)' -derivedDataPath /tmp/NekoPondDerivedData build
 ```
 
-### Screenshot requirements
+### Screenshot/video requirements
 
-- Still screenshot plus short simulator video or repeated screenshots showing animated fish motion.
+- Capture still screenshot and short video or repeated screenshots showing deformation.
 
 ### Acceptance criteria
 
-- Animation is smooth and subtle.
-- Fish do not flicker or show wrong frames.
-- Movement remains calm and organic.
-- Fish readability improves or remains high.
-- No sudden acceleration/jitter.
-
-### Rollback plan
-
-- Disable animation and retain Phase 1D static atlas sprites.
-- Revert movement tuning independently from rendering if needed.
+- One fish appears flexible and alive while using one RGBA texture.
+- No tearing, clipping, checkerboard, or sticker-like translation.
+- Performance remains smooth.
 
 ### Stop conditions
 
-- Atlas frame metadata remains uncertain.
-- Animation causes visual artifacts.
-- Movement regression makes fish hard to track.
+- Warp deformation cannot be made believable with clean texture.
+- Prototype requires engine/platform switch.
+
+## Phase K3 — integrate warp koi into PondSpriteScene with one fish only
+
+### Objective
+
+Integrate the validated warp koi renderer into `PondSpriteScene` with exactly one active warp fish.
+
+### Acceptance criteria
+
+- Pond background, water, environment, ripples, and UI remain intact.
+- One koi uses `SKWarpGeometryGrid` deformation in normal runtime.
+- Fish root node handles position/heading; warp handles body/tail shape.
+- No full atlas sheet display.
+- No per-frame texture decoding.
+
+### Stop conditions
+
+- Integration destabilizes pond rendering.
+- Fish becomes less readable than baseline.
 - Build fails.
+
+## Phase K4 — expand to 3–6 koi variants after asset validation
+
+### Objective
+
+Add multiple validated mesh-deformable koi textures and expand active warp fish count gradually.
+
+### Acceptance criteria
+
+- 3–6 koi variants pass RGBA/padding validation.
+- Each fish has independent phase offset and non-synchronized motion.
+- Fish remain cat-readable and do not overlap excessively.
+- Performance remains stable.
+
+### Stop conditions
+
+- Any variant has background/alpha artifacts.
+- Multi-fish warp cost is too high.
+
+## Phase K5 — connect tap/flee/attraction behavior to warp parameters
+
+### Objective
+
+Couple interaction state to deformation parameters while preserving calm cat-safe behavior.
+
+### Acceptance criteria
+
+- Tap/flee briefly increases tail amplitude/frequency and turn curvature.
+- Attraction subtly changes heading and body curve.
+- Response feels alive but not startling.
+- Fish return to calm state smoothly.
+
+### Stop conditions
+
+- Interaction creates panic darts, jitter, or game-like behavior.
+
+## Phase K6 — final koi visual QA and performance tuning
+
+### Objective
+
+Perform final koi visual QA across moods, fish counts, and iPad landscape runtime.
+
+### Acceptance criteria
+
+- Koi no longer read as stickers.
+- No atlas crop/frame-flip artifacts remain.
+- All accepted koi assets are clean RGBA.
+- Update loop has bounded cost.
+- Visual quality is stable under Settings fish count changes.
+
+### Stop conditions
+
+- Performance or visual quality regresses below baseline.
 
 ## Phase 1F — environment asset replacement
 

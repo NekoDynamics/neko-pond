@@ -4,27 +4,28 @@ This document records unresolved decisions that should not be guessed by future 
 
 ## Open questions
 
-### 1. Exact koi atlas slicing metadata
+### 1. Koi warp asset metadata and validated texture set
 
 Status: unresolved.
 
 Need to determine:
 
-- Dimensions of each Koi atlas.
-- Whether all atlases share the same frame grid.
-- Frame order.
-- Static frame rectangle for Phase 1D.
-- Animation frame rectangles for Phase 1E.
-- Anchor point and display scale.
+- Final clean RGBA koi texture dimensions.
+- Transparent padding requirements for deformation.
+- Head, body center, tail base, and tail tip control landmarks.
+- Grid resolution per variant.
+- Tail amplitude and curvature limits per texture.
+- Whether an optional alpha mask is needed.
+- How many variants can run smoothly on target iPad hardware.
 
 Why it matters:
 
-- Guessing atlas slicing can cause visible frame bleed, wrong animation, or unreadable fish.
+- The atlas slicing path is rejected. Future koi quality depends on clean mesh-deformable textures and stable warp metadata.
 
 Decision needed before:
 
-- Phase 1D if no safe static crop can be confirmed.
-- Definitely before Phase 1E.
+- Phase K2 for prototype tuning.
+- Phase K4 before multi-fish expansion.
 
 ### 2. Whether to keep or remove legacy SceneKit files later
 
@@ -142,3 +143,4 @@ Recommendation:
 | 2026-05-21 | Phase 1C is the next executable phase. | Phase 1A/1B are confirmed complete by project state; current visual gap begins with water/atmosphere overlays. | `App/iPadOS/NekoPond/PondSpriteScene.swift` primarily | Revert only Phase 1C water overlay edits if visual baseline regresses. |
 | 2026-05-21 | Future agents must execute one phase at a time with file allowlists, build, screenshot evidence, and stop. | Prevents broad uncontrolled edits and protects dirty working tree. | `plan/**` | Update plan only if user changes process. |
 | 2026-05-21 | Legacy SceneKit should not be deleted or revived during SpriteKit visual reconstruction. | Current runtime path is SpriteKit; SceneKit is quarantined legacy status. | `App/iPadOS/NekoPond/PondScene.swift` | Dedicated cleanup decision required later. |
+| 2026-05-22 | Reject atlas crop, frame flipping, and segmented sticker koi; adopt SpriteKit `SKWarpGeometryGrid` mesh-deformable koi pipeline. | Current approach fails visual realism and cat-readable living motion; clean RGBA texture deformation is the preferred native SpriteKit path. | `plan/03-phase-roadmap.md`, `plan/04-asset-runtime-pipeline.md`, `plan/05-spritekit-rendering-plan.md`, `plan/06-koi-atlas-and-motion-plan.md`, `plan/12-ready-to-copy-prompts.md` | Return to stable baseline koi if K2/K3 warp prototype fails; defer Metal/Spine/Rive/Live2D unless SpriteKit warp is rejected. |

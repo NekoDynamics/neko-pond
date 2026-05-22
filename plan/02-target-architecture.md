@@ -53,7 +53,7 @@ Target responsibilities:
 
 - Build and maintain the full pond visual layer stack.
 - Load frozen Pond, Water, Koi, and Environment textures through `PondTextureCache`.
-- Maintain fish nodes, fish shadows, and fish movement components.
+- Maintain fish root nodes, fish shadows, SpriteKit warp deformation state, and fish movement components.
 - Convert between scene coordinates and pond world coordinates.
 - Handle pond touches, multi-touch ripples, and fish interaction inputs.
 - Apply mood and settings changes to visual alpha, active fish count, interaction sensitivity, and later background selection.
@@ -77,7 +77,7 @@ Target responsibilities:
 
 - Be the source of truth for frozen asset bundle-relative paths.
 - Preserve exact frozen file names.
-- Expose clear enum cases for Pond backgrounds, Water overlays, Koi atlases, and Environment assets.
+- Expose clear enum cases for Pond backgrounds, Water overlays, validated koi body textures, and Environment assets.
 - Provide `allRuntimeAssetPaths` for validation/preload.
 - Include special-case exact path `Environment/lotus_bud_pink.png.png`.
 
@@ -158,7 +158,7 @@ Layer-specific responsibilities:
 - Caustics: slow, low-alpha, non-flashing light movement.
 - Fog/veil: depth and calm, no milky washout.
 - Koi shadow: soft depth cue below fish.
-- Koi body: readable atlas-backed fish.
+- Koi body: readable mesh-deformed fish using clean RGBA koi textures.
 - Environment: lotus, stones, grasses around edges and selected calm focal areas.
 - Petals: sparse floating motion.
 - Ripples: touch feedback only, pooled or cleaned up.

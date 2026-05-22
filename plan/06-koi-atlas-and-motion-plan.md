@@ -1,236 +1,254 @@
-# 06 — Koi atlas and motion plan
+# 06 — Koi warp rendering and motion plan
 
-This document defines koi reconstruction.
+This document replaces the failed atlas-crop koi direction with the target koi pipeline: SpriteKit `SKWarpGeometryGrid` deformation driven by movement state and clean single-texture RGBA koi art.
+
+## Decision boundary
+
+The atlas-crop, frame-flipping, and segmented sticker approaches are rejected for final runtime use.
+
+Reasons:
+
+- Static atlas crops looked like translated stickers, not living fish.
+- Frame flipping did not create believable swimming.
+- Segmented sprite attempts still read as flat translation.
+- Current koi/water assets include RGB or baked checkerboard/background problems.
+- Cat-readable living motion requires continuous body deformation, not atlas rescue.
 
 ## Confirmed current koi state
 
 - `PondSpriteScene` builds up to 9 fish configs.
 - `PondSettings.fishCount` clamps active count to 3–9.
-- Current koi bodies are procedural via `PondSpriteAssets.koiBodyTexture(config:)`.
+- Current production-safe baseline can remain procedural koi until warp koi is validated.
 - Current shadows are procedural via `PondSpriteAssets.koiShadowTexture(bodySize:)`.
 - Movement is handled by `FishMovementComponent` and `FishSteeringSystem`.
 
-Evidence:
+Evidence from earlier inspection:
 
-- `PondSpriteScene.swift:289` defines `buildFish(sceneScale:)`.
-- `PondSpriteScene.swift:290` creates configs for 9 fish.
-- `PondSpriteScene.swift:305` uses procedural koi body texture.
-- `PondSpriteScene.swift:334` syncs fish node position, rotation, scale, and shadow.
+- `PondSpriteScene.swift` builds fish configs and syncs node position, rotation, scale, and shadow.
+- Existing fish movement already exposes position, heading, velocity, depth, life time, sway phase, alert, attention, and cooldown state that can drive deformation.
 
-## Koi atlas inventory
+## Target technical direction
 
-Frozen atlas assets:
+Use native iPadOS SwiftUI shell and SpriteKit runtime:
 
-- `Koi/koi_cream_red_atlas.png`
-- `Koi/koi_kohaku_atlas.png`
-- `Koi/koi_sanke_atlas.png`
-- `Koi/koi_shiro_utsuri_atlas.png`
-- `Koi/koi_showa_atlas.png`
-- `Koi/koi_yamabuki_atlas.png`
-
-Variant mapping target:
-
-- `KoiVariant.creamRed` → `koi_cream_red_atlas.png`
-- `KoiVariant.kohaku` → `koi_kohaku_atlas.png`
-- `KoiVariant.sanke` → `koi_sanke_atlas.png`
-- `KoiVariant.shiroUtsuri` → `koi_shiro_utsuri_atlas.png`
-- `KoiVariant.showa` → `koi_showa_atlas.png`
-- `KoiVariant.yamabuki` → `koi_yamabuki_atlas.png`
-
-## Atlas size differences
-
-Required before Phase 1D/1E:
-
-- Inspect each atlas dimensions.
-- Confirm whether all atlases share identical dimensions.
-- Confirm row/column layout or explicit frame rectangles.
-- Confirm transparent padding.
-
-Do not assume all atlases use the same grid until confirmed.
-
-Acceptable inspection commands for future phase:
-
-```bash
-python3 - <<'PY'
-from PIL import Image
-from pathlib import Path
-for p in sorted(Path('Assets/Koi').glob('*.png')):
-    im = Image.open(p)
-    print(p, im.size)
-PY
+```text
+SwiftUI shell
+  -> SKView
+  -> PondSpriteScene
+  -> KoiWarpRenderer per fish
+  -> SKSpriteNode(texture: clean RGBA koi body)
+  -> SKWarpGeometryGrid updated from movement state
 ```
 
-If PIL is unavailable, use macOS `sips -g pixelWidth -g pixelHeight Assets/Koi/*.png`.
+Do not switch to Unity, WebGL, Flutter, or pure Metal in this reconstruction. Metal is deferred. Spine, Rive, and Live2D are deferred unless the SpriteKit warp prototype fails.
 
-## Metadata requirement before slicing
+## Mesh-deformable koi texture requirements
 
-Before animation, define metadata for each atlas:
+Final koi runtime textures must be regenerated. Required properties:
 
-- source path
-- pixel width/height
-- frame rectangle(s)
-- frame order
-- display size
-- anchor point
-- optional collision/readability radius
-- optional shadow scale/offset
+- True RGBA PNG with alpha channel.
+- Transparent background.
+- No checkerboard baked into pixels.
+- No white, black, or colored baked background.
+- Single straight top-down koi body texture.
+- Head facing right, tail facing left.
+- Fish centered in the canvas.
+- Enough transparent padding around body and tail for warp deformation.
+- No baked fish shadow.
+- Clean silhouette and readable markings at iPad viewing distance.
+- Symmetric enough to bend without exposing texture-edge artifacts.
 
-Phase 1D may use a single conservative frame if and only if its rectangle can be confirmed. Phase 1E must not proceed without metadata.
+Optional future asset data:
 
-## Initial static sprite plan — Phase 1D
+- Separate alpha mask if silhouette cleanup is needed.
+- Control point metadata describing head/body/tail landmarks.
+- Normal map is deferred and not required for SpriteKit K phases.
 
-Goal:
+Rejected for final runtime:
 
-- Replace procedural body texture with atlas-backed static fish sprites.
-- Do not animate.
-- Do not change movement logic.
+- Existing RGB atlases.
+- Any atlas with baked checkerboard.
+- Any atlas requiring guessed crop rectangles.
+- Any multi-frame sheet displayed as a whole texture.
+- Any asset whose background has to be hidden by blend tricks.
 
-Implementation approach:
+## SKWarpGeometryGrid prototype plan
 
-1. Inspect atlas dimensions.
-2. Determine safe static frame rectangle per atlas.
-3. Add variant-to-atlas path mapping.
-4. Use `PondTextureCache.texture(for:)` to load atlas texture.
-5. Create cropped `SKTexture(rect:in:)` if needed.
-6. Use cropped frame as `SKSpriteNode` texture.
-7. Preserve current display size initially, then adjust if screenshot shows fish too small/large.
-8. Keep current procedural shadow unless a better shadow solution is available.
+Prototype with one fish only before touching multi-fish runtime:
 
-Acceptance criteria:
+1. Generate or import one clean RGBA koi texture matching the requirements above.
+2. Create an isolated SpriteKit scene or debug path with one `SKSpriteNode`.
+3. Apply a cached original `SKWarpGeometryGrid` to the node.
+4. Update only the destination grid over time.
+5. Start with a low-resolution grid such as 5 columns × 2 rows or 6 columns × 3 rows.
+6. Treat the x axis as head-to-tail body length and y axis as body width.
+7. Keep head deformation minimal.
+8. Bend mid-body from turn intensity.
+9. Oscillate tail from speed and per-fish phase.
+10. Verify no texture tearing, transparent-edge clipping, or sticker-like translation.
 
-- Runtime koi visually come from frozen atlas art.
-- No procedural koi bodies remain in normal path.
-- No frame bleed/cropping artifacts.
-- Fish remain large and trackable.
-- Movement, count, and shadows still work.
+Prototype acceptance:
 
-## Later animation frame plan — Phase 1E
+- A stationary root node can appear to swim via deformation alone.
+- When moving, fish reads as one flexible body, not sliding art.
+- Tail beat is visible but not cartoonish.
+- Head remains stable enough for heading readability.
+- Texture edges stay transparent and clean.
 
-Goal:
+## Movement-to-deformation coupling
 
-- Animate koi subtly using atlas frames.
+Keep fish translation and heading on the fish root node. Use warp only for body shape.
 
-Implementation approach:
+Root node state:
 
-1. Confirm metadata.
-2. Precompute frame textures outside `update(_:)`.
-3. Store frame arrays per variant or per fish config.
-4. Use `SKAction.animate(with:timePerFrame:)` or manual time-based frame selection.
-5. Keep animation speed slow and natural.
-6. Avoid changing fish heading/position logic unless needed for visual smoothing.
+- `position`: world-to-scene fish center.
+- `zRotation`: smoothed heading.
+- `xScale/yScale`: depth/readability scale only.
+- `alpha`: visibility and mood tuning only.
 
-Rules:
+Warp state:
 
-- Do not animate with guessed frame order.
-- Do not allocate/crop textures per frame.
-- Do not add flashy tail effects.
-- Do not make fish appear cartoonish.
+- Body curvature from turn intensity.
+- Tail beat amplitude from speed.
+- Tail beat frequency from speed with calm limits.
+- Phase offset per fish to prevent synchronized swimming.
+- Alert/flee response increases curvature and tail amplitude briefly, with smoothing.
 
-## Movement behavior plan
+Do not use warp to teleport the fish or correct steering bugs.
 
-Current movement should remain the foundation:
+## Tail beat and body curvature model
 
-- Fish have position, heading, velocity, depth, life time, sway phase, alert/attention/cooldown fields.
-- `FishSteeringSystem` updates movement within pond bounds.
-- `PondSpriteScene.syncFishNode` applies position, rotation, depth scale, body sway, and shadow offset.
+Suggested conceptual model:
 
-Target refinements:
+```text
+speed01 = normalized current speed
+turn01 = clamped signed heading delta / max comfortable turn
+phase = fish.phase + time * lerp(calmFrequency, fastFrequency, speed01)
+bodyCurve = turn01 * bodyCurveScale
+wave = sin(phase + xAlongBody * waveLag)
+tailAmplitude = lerp(calmTailAmp, fastTailAmp, speed01) + alertBoost
+lateralOffset(x) = bodyCurve * bodyWeight(x) + wave * tailAmplitude * tailWeight(x)
+```
 
-- Smooth heading changes.
-- Preserve calm speed range.
-- Avoid fish overlapping too much.
-- Avoid edge sticking.
-- Preserve cat readability over realism if they conflict.
+Weighting target:
+
+- Head: near 0 lateral warp for stable direction.
+- Front body: low bend.
+- Mid body: smooth curvature.
+- Tail base: stronger bend.
+- Tail tip: strongest oscillation.
+
+Smoothing rules:
+
+- Smooth heading before deriving turn intensity.
+- Smooth speed before deriving tail amplitude/frequency.
+- Clamp lateral offsets so transparent padding is sufficient.
+- Decay alert boost over time.
+
+## Integration plan
+
+### Phase K0 — reject failed koi experiment and return to stable baseline
+
+- Remove atlas-crop rescue from the executable plan.
+- Keep or restore the last stable non-broken koi baseline.
+- Do not attempt to salvage current atlas crops.
+
+### Phase K1 — regenerate one clean RGBA mesh-deformable koi texture
+
+- Produce one validated PNG for the warp prototype.
+- Store only where the phase explicitly allows.
+- Validate alpha and absence of checkerboard/background before runtime integration.
+
+### Phase K2 — isolated single-fish SKWarpGeometryGrid prototype
+
+- Build a standalone one-fish proof inside SpriteKit.
+- No pond integration and no multi-fish work.
+- Tune grid resolution, tail amplitude, body curvature, and padding.
+
+### Phase K3 — one-fish PondSpriteScene integration
+
+- Integrate the validated warp renderer into `PondSpriteScene` with one fish only.
+- Preserve water/background/environment layers.
+- Keep performance stable and no per-frame texture decoding.
+
+### Phase K4 — 3–6 koi variants after asset validation
+
+- Add more variants only after each texture passes RGBA/padding checks.
+- Assign independent phase offsets.
+- Avoid synchronized tail beats.
+
+### Phase K5 — tap/flee/attraction coupling
+
+- Connect tap, flee, and attraction state to warp parameters.
+- Use brief amplitude/frequency boosts, not panic darts.
+- Preserve calm cat-safe behavior.
+
+### Phase K6 — final koi visual QA and performance tuning
+
+- Validate all moods, fish counts, and iPad landscape size.
+- Profile update cost.
+- Reduce grid resolution or active fish count if needed.
 
 ## Cat tap near fish behavior
 
-Current behavior:
+Current behavior can remain the input source:
 
-- Touch near fish within distance 1.5 triggers `touchFish`.
+- Touch near fish triggers a gentle response.
 - Fish attention direction points away from touch.
 - Fish gets alert/cooldown/target speed.
 
-Target:
+Warp target:
 
-- Direct or near-fish tap should cause a short gentle flee.
-- Motion should be smooth, not a panic dart.
-- Fish should remain visible and return to calm.
-
-Acceptance:
-
-- A cat tap creates satisfying fish response but no stressful burst.
+- Direct or near-fish tap increases tail beat and curvature briefly.
+- Motion remains smooth, not a panic dart.
+- Fish remains visible and returns to calm.
 
 ## Long press attraction behavior
-
-Not confirmed implemented currently.
 
 Target future behavior:
 
 - Long press away from fish creates mild curiosity attraction.
 - Fish gradually angle toward the touch area.
+- Tail beat and body curve increase subtly as fish turns.
 - No feeding UI or game reward.
-- Stop attraction when touch ends.
 - Avoid all fish swarming into one pile.
-
-Implementation phase:
-
-- Phase 3C unless explicitly pulled earlier.
-
-## Flee gently behavior
-
-Target tuning:
-
-- Use limited target speed boost.
-- Use cooldown to avoid repeated jitter.
-- Turn radius should look organic.
-- Avoid fish crossing through stones/lotus if future avoidance exists.
-
-## Return-to-calm behavior
-
-Target:
-
-- Alert and attention timers decay.
-- Speed returns to calm swim.
-- Fish rejoin wandering/schooling behavior.
-- No permanent state after taps.
 
 ## Fish count handling
 
-Current:
+Target after K4:
 
-- `activeFishCount = min(max(settings.fishCount, 3), 9)`.
-- Fish nodes and shadows are hidden when index exceeds active count.
-
-Target:
-
-- Preserve 3–9 range.
-- Keep fish count changes immediate and stable.
-- Avoid rebuilding the whole scene just to change active count.
-- Ensure visible variants look balanced at each count.
+- Preserve 3–9 settings range only after variants and performance are validated.
+- Initial warp integration should use one fish only.
+- Expand to 3–6 fish first.
+- 7–9 fish requires performance and readability proof.
 
 ## Acceptance criteria for cat readability
 
 A koi implementation is acceptable only if:
 
-- At least the active fish are easy to see against all water moods.
+- Fish look like living flexible bodies, not translated stickers.
+- Active fish are easy to see against all water moods.
 - Fish are large enough for cats to track from a normal viewing distance.
 - Motion is smooth and continuous.
 - Touch response is calm, not startling.
 - Fish do not disappear under water overlays, lotus, or vignette.
-- Fish do not look like UI icons or stickers.
 - Fish remain inside pond bounds.
-- No atlas slicing artifacts are visible.
+- Texture alpha is clean with no checkerboard/background artifacts.
+- No per-frame texture decoding or atlas slicing occurs.
 
 ## Rollback strategy
 
-- Phase 1D rollback: restore procedural body texture while keeping all movement code unchanged.
-- Phase 1E rollback: disable animation and retain static atlas sprites.
-- Movement rollback: revert tuning constants separately from render code.
+- K1 rollback: discard generated candidate texture and keep baseline koi.
+- K2 rollback: remove isolated prototype path.
+- K3 rollback: disable warp renderer and restore stable baseline fish.
+- K4 rollback: reduce to one validated warp fish.
+- K5 rollback: decouple interaction state from warp parameters while keeping movement.
 
 ## Stop conditions
 
-- Atlas dimensions or frame layout cannot be verified.
-- Atlas crop shows visible neighboring frames.
-- Fish become too small or hard to track.
+- Generated texture has RGB-only data, baked checkerboard, or nontransparent background.
+- Transparent padding is insufficient for deformation.
+- `SKWarpGeometryGrid` creates tearing, clipping, or unacceptable performance.
+- Fish still reads as flat sticker translation after K2.
+- One-fish integration regresses pond background/water stability.
 - Build fails.
-- Movement becomes jittery, aggressive, or game-like.

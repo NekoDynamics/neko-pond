@@ -78,28 +78,51 @@ Runtime code must load these as bundle-relative paths, not as source-tree paths.
 - If a Water overlay fails to load, stop Phase 1C rather than silently accepting procedural art, unless the user explicitly authorizes fallback.
 - Keep procedural generation available only as emergency fallback while debugging.
 
-## Koi atlases
+## Koi mesh-deformable textures
 
-### Exact relative bundle paths
+The previous atlas-crop koi assets are rejected for final runtime use. Future koi rendering must use clean single-texture RGBA koi assets that can be deformed by SpriteKit `SKWarpGeometryGrid`.
 
-- `Koi/koi_cream_red_atlas.png`
-- `Koi/koi_kohaku_atlas.png`
-- `Koi/koi_sanke_atlas.png`
-- `Koi/koi_shiro_utsuri_atlas.png`
-- `Koi/koi_showa_atlas.png`
-- `Koi/koi_yamabuki_atlas.png`
+### Required koi asset properties
+
+- True RGBA PNG with alpha channel.
+- Transparent background.
+- No checkerboard baked into pixels.
+- No white, black, or colored baked background.
+- Single straight top-down koi body texture.
+- Head facing right, tail facing left.
+- Fish centered in the canvas.
+- Enough transparent padding for warp deformation.
+- No baked fish shadow.
+- Clean silhouette and cat-readable markings.
+
+### Optional future koi asset data
+
+- Separate alpha mask for silhouette cleanup.
+- Control point metadata for head, mid-body, tail base, and tail tip.
+- Normal map is deferred and not required for SpriteKit warp phases.
 
 ### Loading rules
 
-- Load each atlas through `PondTextureCache`.
-- Phase 1D may use one safe static frame per atlas only after inspecting image dimensions and frame layout.
-- Phase 1E may animate only after metadata is confirmed.
+- Load koi body textures through `PondTextureCache` or a future equivalent cache.
+- Decode each texture once during setup/preload, never inside `update(_:)`.
+- Apply deformation with `SKWarpGeometryGrid` on an `SKSpriteNode`.
+- Cache the original grid and update only destination grid values per frame.
+- Do not display a full atlas sheet as a fish.
+- Do not crop guessed atlas frames for final runtime koi.
+
+### Rejected koi assets for final runtime
+
+- `Koi/*_atlas.png` as atlas-crop/frame-flip runtime sources.
+- RGB-only fish textures.
+- PNGs with baked checkerboard.
+- PNGs with baked white/black backgrounds.
+- Assets that require blend-mode tricks to hide backgrounds.
 
 ### Fallback rules
 
-- If atlas slicing metadata is unknown and a safe crop cannot be determined, stop Phase 1D and report that metadata is required.
-- Do not guess frame grid if screenshot evidence shows bleed/cropping.
-- Procedural koi may remain only as a temporary fallback if static atlas replacement cannot be completed safely.
+- If no clean RGBA mesh-deformable koi texture exists, stop K1/K2 and keep the stable baseline koi.
+- Do not rescue failed atlases by additional cropping or frame flipping.
+- Procedural koi may remain only as temporary baseline until warp koi passes validation.
 
 ## Environment assets
 
@@ -163,7 +186,7 @@ Every alpha change requires screenshot validation.
 
 - Pond backgrounds are 2732×2048 and should be loaded deliberately.
 - Avoid loading all mood backgrounds during early phases unless testing mood switching.
-- Koi atlases should be cached but not repeatedly re-sliced in hot paths.
+- Koi warp textures should be cached once; do not decode textures or allocate grids unnecessarily in hot paths.
 - Large full-screen overlays should be reused and resized, not recreated per frame.
 - `didChangeSize` currently rebuilds layers; future optimization may need resizing existing nodes instead.
 
@@ -177,22 +200,21 @@ Every alpha change requires screenshot validation.
 - Do not compress, resize, or re-export frozen assets without explicit user instruction.
 - Do not change Xcode resource membership during phases that do not allow project edits.
 
-## Future atlas metadata plan
+## Future koi metadata plan
 
-Before Phase 1E animation, create or confirm metadata describing:
+Optional metadata may be added only after K1/K2 prove the warp direction:
 
-- Atlas image dimensions.
-- Frame grid rows/columns or explicit frame rectangles.
-- Frame order.
-- Anchor point for fish rotation.
-- Pixel padding/bleed margins.
-- Variant-to-atlas mapping.
-- Intended display size range.
-- Whether each atlas contains directional frames, swim-cycle frames, or both.
+- Texture path and pixel dimensions.
+- Display size range.
+- Head, body center, tail base, and tail tip landmarks.
+- Transparent padding limits.
+- Grid resolution recommendation.
+- Per-variant curvature/tail amplitude tuning.
+- Optional alpha mask path.
 
 Potential future implementation locations if explicitly approved:
 
 - `App/iPadOS/NekoPond/PondSpriteModels.swift` for simple hardcoded metadata.
-- New `App/iPadOS/NekoPond/KoiAtlasMetadata.swift` if project file changes are allowed.
+- New koi metadata Swift file if project file changes are allowed.
 
 Do not create external JSON metadata unless the phase explicitly allows adding resources and project membership.

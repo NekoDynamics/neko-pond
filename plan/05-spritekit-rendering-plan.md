@@ -176,17 +176,32 @@ Target:
 - Keep below koi and offset slightly down/right or based on light direction.
 - Shadow alpha must not make fish look like floating stickers.
 
-## Koi sprite layer
+## Koi warp renderer layer
 
 Current:
 
-- Procedural body texture.
+- Procedural body texture or failed atlas experiments may exist in local history.
 
 Target:
 
-- Phase 1D: static atlas-backed fish.
-- Phase 1E: metadata-backed animation.
-- Preserve movement sync, zRotation, depth scale, and visibility by fish count.
+- Use an `SKSpriteNode` with one clean RGBA koi body texture per fish.
+- Apply `SKWarpGeometryGrid` as the primary koi deformation technique.
+- Cache the original grid when the fish node is created.
+- Update the destination grid per frame from movement state.
+- Keep fish root node position, heading, depth scale, and visibility separate from deformation.
+- Derive body curvature from smoothed turn intensity.
+- Derive tail beat amplitude/frequency from smoothed speed.
+- Assign independent phase offset per fish.
+- Keep head deformation minimal for heading readability.
+- Avoid per-frame texture decoding.
+- Avoid per-frame atlas cropping.
+- Never display a full atlas sheet as a fish.
+
+Implementation constraints:
+
+- Start with one fish only in Phase K3.
+- Expand to 3–6 only after each asset passes RGBA/padding validation.
+- Keep procedural or previous stable koi as rollback baseline until warp koi is accepted.
 
 ## Environment layer
 
