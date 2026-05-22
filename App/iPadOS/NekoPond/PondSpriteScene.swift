@@ -141,33 +141,58 @@ final class PondSpriteScene: SKScene {
         let floor = makePondBackgroundLayer(size: size)
         addChild(floor)
 
-        // 2. Deep teal water gradient
-        let deepWater = makeSpriteLayer(
-            texture: PondSpriteAssets.deepWaterTexture(size: CGSize(width: 1024, height: 768)),
-            size: CGSize(width: size.width * 1.04, height: size.height * 1.04),
-            zPosition: PondLayerZ.deepWater
+        // 2. Deep water veil
+        let deepWater = makeWaterOverlayLayer(
+            asset: .waterVeilDeep,
+            fallbackTexture: PondSpriteAssets.deepWaterTexture(size: CGSize(width: 1024, height: 768)),
+            fallbackSize: CGSize(width: size.width * 1.04, height: size.height * 1.04),
+            zPosition: PondLayerZ.deepWater,
+            alpha: 0.16
         )
-        deepWater.alpha = 0.16
         addChild(deepWater)
 
-        // 3. Caustics overlay
-        let caustics = makeSpriteLayer(
-            texture: PondSpriteAssets.causticsTexture(size: CGSize(width: 1024, height: 768)),
-            size: CGSize(width: size.width * 1.02, height: size.height * 1.02),
-            zPosition: PondLayerZ.caustics
+        // 3. Caustics overlays
+        let caustics = makeWaterOverlayLayer(
+            asset: .causticsLoop01,
+            fallbackTexture: PondSpriteAssets.causticsTexture(size: CGSize(width: 1024, height: 768)),
+            fallbackSize: CGSize(width: size.width * 1.02, height: size.height * 1.02),
+            zPosition: PondLayerZ.caustics,
+            alpha: 0.10
         )
-        caustics.alpha = 0.42
-        caustics.blendMode = .add
+        caustics.blendMode = .alpha
         addChild(caustics)
-        animateCaustics(caustics)
+        animateCaustics(caustics, baseAlpha: 0.10, driftScale: 1.0)
 
-        // 4. Fog veil
-        let fog = makeSpriteLayer(
-            texture: PondSpriteAssets.fogTexture(size: CGSize(width: 1024, height: 768)),
-            size: CGSize(width: size.width, height: size.height),
-            zPosition: PondLayerZ.fogVeil
+        let causticsLoop02 = makeWaterOverlayLayer(
+            asset: .causticsLoop02,
+            fallbackTexture: PondSpriteAssets.causticsTexture(size: CGSize(width: 1024, height: 768)),
+            fallbackSize: CGSize(width: size.width * 1.02, height: size.height * 1.02),
+            zPosition: PondLayerZ.caustics + 0.01,
+            alpha: 0.06
         )
-        fog.alpha = 0.12
+        causticsLoop02.blendMode = .alpha
+        addChild(causticsLoop02)
+        animateCaustics(causticsLoop02, baseAlpha: 0.06, driftScale: -0.7)
+
+        let causticsSoft = makeWaterOverlayLayer(
+            asset: .causticsSoftLarge,
+            fallbackTexture: PondSpriteAssets.fogTexture(size: CGSize(width: 1024, height: 768)),
+            fallbackSize: CGSize(width: size.width, height: size.height),
+            zPosition: PondLayerZ.caustics + 0.02,
+            alpha: 0.04
+        )
+        causticsSoft.blendMode = .alpha
+        addChild(causticsSoft)
+        animateCaustics(causticsSoft, baseAlpha: 0.04, driftScale: 0.45)
+
+        // 4. Near water veil
+        let fog = makeWaterOverlayLayer(
+            asset: .waterVeilNear,
+            fallbackTexture: PondSpriteAssets.fogTexture(size: CGSize(width: 1024, height: 768)),
+            fallbackSize: CGSize(width: size.width, height: size.height),
+            zPosition: PondLayerZ.fogVeil,
+            alpha: 0.08
+        )
         addChild(fog)
 
         // 5-6. Koi (shadows + bodies)
@@ -183,13 +208,13 @@ final class PondSpriteScene: SKScene {
         buildMotes()
 
         // 10. Vignette
-        let vignette = makeSpriteLayer(
-            texture: PondSpriteAssets.vignetteTexture(size: CGSize(width: 1024, height: 768)),
-            size: CGSize(width: size.width, height: size.height),
-            zPosition: PondLayerZ.vignette
+        let vignette = makeWaterOverlayLayer(
+            asset: .darkVignette,
+            fallbackTexture: PondSpriteAssets.vignetteTexture(size: CGSize(width: 1024, height: 768)),
+            fallbackSize: CGSize(width: size.width, height: size.height),
+            zPosition: PondLayerZ.vignette,
+            alpha: 0.30
         )
-        vignette.alpha = 0.32
-        vignette.isUserInteractionEnabled = false
         addChild(vignette)
 
         logPondLayerDebug(
@@ -204,8 +229,44 @@ final class PondSpriteScene: SKScene {
 
     private func makeSpriteLayer(texture: UIImage, size: CGSize, zPosition: CGFloat) -> SKSpriteNode {
         let node = SKSpriteNode(texture: SKTexture(image: texture), size: size)
-        node.position = .zero
+        node.position = sceneCenter()
         node.zPosition = zPosition
+        node.isUserInteractionEnabled = false
+        return node
+    }
+
+    private func makeWaterOverlayLayer(
+        asset: PondAssetRegistry.WaterOverlay,
+        fallbackTexture: UIImage,
+        fallbackSize: CGSize,
+        zPosition: CGFloat,
+        alpha: CGFloat
+    ) -> SKSpriteNode {
+        let assetPath = PondAssetRegistry.path(for: asset)
+        let node: SKSpriteNode
+
+        if let texture = textureCache.texture(for: assetPath) {
+            node = makeAspectFillSprite(texture: texture, zPosition: zPosition, alpha: alpha)
+        } else {
+            #if DEBUG
+            print("DEBUG PondSpriteScene frozen water asset failed to load: \(assetPath); using procedural fallback.")
+            #endif
+            node = makeSpriteLayer(texture: fallbackTexture, size: fallbackSize, zPosition: zPosition)
+            node.alpha = alpha
+        }
+
+        node.isUserInteractionEnabled = false
+        return node
+    }
+
+    private func makeAspectFillSprite(texture: SKTexture, zPosition: CGFloat, alpha: CGFloat) -> SKSpriteNode {
+        let node = SKSpriteNode(texture: texture)
+        node.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        node.position = sceneCenter()
+        node.size = aspectFillSize(textureSize: texture.size(), targetSize: size)
+        node.zPosition = zPosition
+        node.alpha = alpha
+        node.colorBlendFactor = 0.0
         node.isUserInteractionEnabled = false
         return node
     }
@@ -268,18 +329,18 @@ final class PondSpriteScene: SKScene {
 
     // MARK: - Caustics Animation
 
-    private func animateCaustics(_ node: SKSpriteNode) {
+    private func animateCaustics(_ node: SKSpriteNode, baseAlpha: CGFloat, driftScale: CGFloat) {
         let drift = SKAction.sequence([
-            SKAction.moveBy(x: 8, y: 5, duration: 3.2),
-            SKAction.moveBy(x: -6, y: 3, duration: 2.8),
-            SKAction.moveBy(x: -4, y: -6, duration: 3.0),
-            SKAction.moveBy(x: 2, y: -2, duration: 2.5)
+            SKAction.moveBy(x: 7 * driftScale, y: 4 * driftScale, duration: 12.0),
+            SKAction.moveBy(x: -5 * driftScale, y: 3 * driftScale, duration: 11.0),
+            SKAction.moveBy(x: -4 * driftScale, y: -5 * driftScale, duration: 13.0),
+            SKAction.moveBy(x: 2 * driftScale, y: -2 * driftScale, duration: 10.0)
         ])
         node.run(SKAction.repeatForever(drift))
 
         let fade = SKAction.sequence([
-            SKAction.fadeAlpha(to: 0.45, duration: 4.0),
-            SKAction.fadeAlpha(to: 0.65, duration: 3.5)
+            SKAction.fadeAlpha(to: baseAlpha * 0.78, duration: 8.0),
+            SKAction.fadeAlpha(to: baseAlpha * 1.18, duration: 9.0)
         ])
         node.run(SKAction.repeatForever(fade))
     }
@@ -417,8 +478,16 @@ final class PondSpriteScene: SKScene {
 
     private func buildMotes() {
         let emitter = SKEmitterNode()
-        emitter.particleTexture = SKTexture(image: PondSpriteAssets.moteTexture())
-        emitter.particleBirthRate = 6
+        let motePath = PondAssetRegistry.path(for: PondAssetRegistry.WaterOverlay.moteSoft)
+        if let moteTexture = textureCache.texture(for: motePath) {
+            emitter.particleTexture = moteTexture
+        } else {
+            #if DEBUG
+            print("DEBUG PondSpriteScene frozen water asset failed to load: \(motePath); using procedural mote fallback.")
+            #endif
+            emitter.particleTexture = SKTexture(image: PondSpriteAssets.moteTexture())
+        }
+        emitter.particleBirthRate = 4
         emitter.numParticlesToEmit = 0
         emitter.particleLifetime = 12.0
         emitter.particleLifetimeRange = 6.0
@@ -426,14 +495,14 @@ final class PondSpriteScene: SKScene {
         emitter.emissionAngleRange = .pi * 2
         emitter.particleSpeed = 8
         emitter.particleSpeedRange = 5
-        emitter.particleAlpha = 0.25
-        emitter.particleAlphaRange = 0.15
+        emitter.particleAlpha = 0.14
+        emitter.particleAlphaRange = 0.08
         emitter.particleAlphaSpeed = -0.01
         emitter.particleScale = 0.8
         emitter.particleScaleRange = 0.4
         emitter.particleColorBlendFactor = 1.0
         emitter.particleColor = UIColor(red: 0.50, green: 0.80, blue: 0.72, alpha: 1.0)
-        emitter.particleBlendMode = .add
+        emitter.particleBlendMode = .alpha
         emitter.position = CGPoint(x: size.width * 0.5, y: size.height * 0.5)
         emitter.particlePosition = CGPoint.zero
         emitter.particlePositionRange = CGVector(dx: size.width * 0.9, dy: size.height * 0.8)
